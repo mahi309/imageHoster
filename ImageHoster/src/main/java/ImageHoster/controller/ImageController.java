@@ -71,12 +71,10 @@ public class ImageController {
 			HttpSession session) {
 		logger.info("show images method called");
 		try {
-
 			Image image = imageService.getImageByTitle(id, title);
 			model.addAttribute("image", image);
 			model.addAttribute("tags", image.getTags());
 			model.addAttribute("comments", image.getComment());
-			model.addAttribute("editError", AppConstant.edit);
 			return "images/image";
 		} catch (Exception e) {
 			logger.error(e.toString());
@@ -168,7 +166,6 @@ public class ImageController {
 				model.addAttribute("image", image);
 				model.addAttribute("tags", image.getTags());
 				model.addAttribute("comments", image.getComment());
-				model.addAttribute("editError", AppConstant.edit);
 				return "images/image";
 			}
 		} catch (Throwable e) {
