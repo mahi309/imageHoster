@@ -1,11 +1,8 @@
-/*
 package ImageHoster.controller;
-
 
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
-import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,20 +13,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(CommentController.class)
+@WebMvcTest(ImageController.class)
 public class CommentControllerTest {
     protected MockHttpSession session;
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private CommentService commentService;
 
     @MockBean
     private ImageService imageService;
@@ -65,4 +58,4 @@ public class CommentControllerTest {
                 .andExpect(redirectedUrl("/images/1/new"));
     }
 }
-*/
+

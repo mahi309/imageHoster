@@ -12,13 +12,14 @@
 <!-- Get username and password to log in the application-->
 <form th:action="@{/users/login}" th:method="POST" th:object="${User}">
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username"/>
+    <input type="text" id="username" name="username" required/>
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password"/>
+    <input type="password" id="password" name="password" required/>
     <input type="submit" value="Login"/>
 </form>
         <div th:if="${loginError}"><p style="color:red">Invalid credentials.Please entered correct username and password</p></div>
         <div th:if="${userNameError}"><p style="color:red">Please enter the userName</p></div>
         <div th:if="${passwordError}"><p style="color:red">Please entered the password</p></div>
+       <div th:if="${passwordTypeError}" style="color:red">Password must contain atleast 1 alphabet, 1 number & 1 special character</div>
 
 </html>

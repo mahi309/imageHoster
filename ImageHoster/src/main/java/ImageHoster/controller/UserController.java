@@ -96,15 +96,21 @@ public class UserController {
 	@RequestMapping(value = "users/login", method = RequestMethod.POST)
 	public String loginUser(User user, HttpSession session, Model model) {
 		try {
-			if (!StringUtils.isEmpty(user.getUsername()) && user.getUsername()!=null) {
-				if (!StringUtils.isEmpty(user.getPassword()) && user.getPassword()!=null) {
-					User existingUser = userService.login(user);
-					if (existingUser != null) {
-						session.setAttribute("loggeduser", existingUser);
-						return "redirect:/images";
-					} else {
-						return "users/login";
+			if (!StringUtils.isEmpty(user.getUsername()) && user.getUsername() != null) {
+				if (!StringUtils.isEmpty(user.getPassword()) && user.getPassword() != null) {
+					Pattern p = Pattern.compile(AppConstant.passwordRegex);
+					Matcher m = p.matcher(user.getPassword());
+					if (m.matches()) {
+						User existingUser = userService.login(user);
+						if (existingUser != null) {
+							session.setAttribute("loggeduser", existingUser);
+							return "redirect:/images";
+						} else {
+							return "users/login";
+						}
 					}
+					model.addAttribute("passwordTypeError", AppConstant.passwordValidation);
+					return "users/login";
 				}
 				model.addAttribute("passwordError", AppConstant.passwordError);
 				return "users/login";
