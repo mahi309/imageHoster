@@ -79,6 +79,7 @@ public class ImageController {
 		} catch (Exception e) {
 			logger.error(e.toString());
 			e.printStackTrace();
+			model.addAttribute("error", "Errro Occured While Showing Images");
 			return "/error";
 		}
 

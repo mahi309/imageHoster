@@ -9,6 +9,7 @@ import constatnt.AppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpSession;
@@ -38,11 +39,10 @@ public class UserController {
 			user.setProfile(profile);
 			model.addAttribute("User", user);
 			return "users/registration";
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "/error";
 		}
-	
 
 	}
 
@@ -53,8 +53,8 @@ public class UserController {
 	@RequestMapping(value = "users/registration", method = RequestMethod.POST)
 	public String registerUser(User user, Model model) {
 		try {
-			 Pattern p = Pattern.compile(AppConstant.passwordRegex); 
-		     Matcher m = p.matcher(user.getPassword()); 
+			Pattern p = Pattern.compile(AppConstant.passwordRegex);
+			Matcher m = p.matcher(user.getPassword());
 
 			if (!m.matches()) {
 				model.addAttribute("passwordTypeError", AppConstant.passwordValidation);
@@ -67,11 +67,10 @@ public class UserController {
 				userService.registerUser(user);
 				return "redirect:/users/login";
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			return"error";
+			return "error";
 		}
-		
 
 	}
 
@@ -95,20 +94,30 @@ public class UserController {
 	// If user with entered username and password does not exist in the database,
 	// redirect to the same login page
 	@RequestMapping(value = "users/login", method = RequestMethod.POST)
-	public String loginUser(User user, HttpSession session) {
+	public String loginUser(User user, HttpSession session, Model model) {
 		try {
-			User existingUser = userService.login(user);
-			if (existingUser != null) {
-				session.setAttribute("loggeduser", existingUser);
-				return "redirect:/images";
-			} else {
+			if (!StringUtils.isEmpty(user.getUsername()) && user.getUsername()!=null) {
+				if (!StringUtils.isEmpty(user.getPassword()) && user.getPassword()!=null) {
+					User existingUser = userService.login(user);
+					if (existingUser != null) {
+						session.setAttribute("loggeduser", existingUser);
+						return "redirect:/images";
+					} else {
+						return "users/login";
+					}
+				}
+				model.addAttribute("passwordError", AppConstant.passwordError);
 				return "users/login";
 			}
-		}catch(Exception e) {
+			model.addAttribute("userNameError", AppConstant.userNameError);
+			return "users/login";
+
+		} catch (Exception e) {
 			e.printStackTrace();
-			return "/error";
+			model.addAttribute("loginError", AppConstant.loginFailure);
+			return "users/login";
 		}
-		
+
 	}
 
 	// This controller method is called when the request pattern is of type
@@ -126,12 +135,10 @@ public class UserController {
 			List<Image> images = imageService.getAllImages();
 			model.addAttribute("images", images);
 			return "index";
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "/error";
 		}
-		
-
 
 	}
 }

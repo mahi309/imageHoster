@@ -17,5 +17,8 @@
     <input type="password" id="password" name="password"/>
     <input type="submit" value="Login"/>
 </form>
+        <div th:if="${loginError}"><p style="color:red">Invalid credentials.Please entered correct username and password</p></div>
+        <div th:if="${userNameError}"><p style="color:red">Please enter the userName</p></div>
+        <div th:if="${passwordError}"><p style="color:red">Please entered the password</p></div>
 
 </html>
