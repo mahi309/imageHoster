@@ -43,6 +43,7 @@ public class UserController {
 			return "/error";
 		}
 	
+
 	}
 
 	// This controller method is called when the request pattern is of type
@@ -71,6 +72,7 @@ public class UserController {
 			return"error";
 		}
 		
+
 	}
 
 	// This controller method is called when the request pattern is of type
@@ -129,6 +131,7 @@ public class UserController {
 			return "/error";
 		}
 		
+
 
 	}
 }

@@ -59,6 +59,7 @@ public class ImageRepository {
 	// Returns the image in case the image is found in the database
 	// Returns null if no image is found in the database
 	public Image getImageByTitle(Integer id, String title)throws Exception {
+
 		EntityManager em = emf.createEntityManager();
 		try {
 			System.out.println("id and title is" + id + " " + title);
@@ -69,7 +70,7 @@ public class ImageRepository {
 			return typedQuery.getSingleResult();
 		} catch (Exception nre) {
           throw nre;
-		}
+		}		
 	}
 
 	// The method creates an instance of EntityManager
@@ -87,6 +88,7 @@ public class ImageRepository {
 			throw e;
 		}
 		
+
 	}
 
 	// The method receives the Image object to be updated in the database

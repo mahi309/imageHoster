@@ -16,6 +16,7 @@ public class ImageService {
 	// Call the getAllImages() method in the Repository and obtain a List of all the
 	// images in the database
 	public List<Image> getAllImages() throws Exception {
+
 		try {
 			return imageRepository.getAllImages();
 
@@ -49,9 +50,9 @@ public class ImageService {
 		} catch (Exception e) {
 			throw e;
 		}
-
 	}
 
+	
 	// The method calls the getImage() method in the Repository and passes the id of
 	// the image to be fetched
 	public Image getImage(Integer imageId) throws Exception {
@@ -75,6 +76,7 @@ public class ImageService {
 
 	// The method calls the deleteImage() method in the Repository and passes the
 	// Image id of the image to be deleted in the database
+
 	public void deleteImage(Integer imageId) throws Exception {
 		try {
 			imageRepository.deleteImage(imageId);

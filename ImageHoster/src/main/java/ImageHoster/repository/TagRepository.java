@@ -11,6 +11,7 @@ public class TagRepository {
     private EntityManagerFactory emf;
 
     public Tag createTag(Tag tag)throws Exception {
+
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
 
@@ -26,12 +27,14 @@ public class TagRepository {
     }
 
     public Tag findTag(String tagName)throws Exception {
+
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Tag> typedQuery = em.createQuery("SELECT t from Tag t where t.tag_name =:tagName", Tag.class).setParameter("tagName", tagName);
             return typedQuery.getSingleResult();
         } catch (Exception e) {
             throw e;
+
         }
     }
 }
