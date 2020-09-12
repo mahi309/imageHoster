@@ -2,6 +2,9 @@ package ImageHoster.service;
 
 import ImageHoster.model.Tag;
 import ImageHoster.repository.TagRepository;
+
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,9 @@ public class TagService {
 		try {
 			return tagRepository.findTag(title);
 
-		} catch (Exception e) {
+		} catch (NoResultException nre) {
+            return null;
+        }catch (Exception e) {
 			throw e;
 		}
 	}

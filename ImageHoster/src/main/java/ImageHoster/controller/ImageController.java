@@ -132,9 +132,9 @@ public class ImageController {
 			return "redirect:/images";
 
 		} catch (Throwable e) {
-			logger.error("Error occured while creating the image"+e.toString());
+			logger.error("Error occured while creating the image" + e.toString());
 			e.printStackTrace();
-			return"/error";
+			return "/error";
 		}
 
 	}
@@ -155,7 +155,7 @@ public class ImageController {
 	public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
 		try {
 			logger.info("edit image method called");
-			logger.info("image id  is"+imageId);
+			logger.info("image id  is" + imageId);
 			Image image = imageService.getImage(imageId);
 			User user = (User) session.getAttribute("loggeduser");
 
@@ -171,12 +171,12 @@ public class ImageController {
 				model.addAttribute("editError", AppConstant.edit);
 				return "images/image";
 			}
-		}catch(Throwable e) {
+		} catch (Throwable e) {
 			logger.error(e.toString());
 			e.printStackTrace();
 			return "/error";
 		}
-		
+
 	}
 
 	// This controller method is called when the request pattern is of type
@@ -199,8 +199,9 @@ public class ImageController {
 	// of all the tags
 	@RequestMapping(value = "/editImage", method = RequestMethod.PUT)
 	public String editImageSubmit(@RequestParam("file") MultipartFile file, @RequestParam("imageId") Integer imageId,
-			@RequestParam("tags") String tags, Image updatedImage, HttpSession session) throws IOException {
+			@RequestParam("tags") String tags, Image updatedImage, HttpSession session,Model model) throws IOException {
 
+		logger.info("edit submit image api called");
 		try {
 			Image image = imageService.getImage(imageId);
 			String updatedImageData = convertUploadedFileToBase64(file);
@@ -219,14 +220,17 @@ public class ImageController {
 			updatedImage.setDate(new Date());
 
 			imageService.updateImage(updatedImage);
-			return "redirect:/images/" + updatedImage.getTitle();
-
-		}catch(Throwable t) {
-			logger.error("exception occured while edit submit image "+t.toString());
+			logger.info("before submitting the request");
+			model.addAttribute("image", updatedImage);
+			model.addAttribute("tags", updatedImage.getTags());
+			model.addAttribute("comments", updatedImage.getComment());
+			return "images/image";
+		} catch (Throwable t) {
+			logger.error("exception occured while edit submit image " + t.toString());
 			t.printStackTrace();
 			return "/error";
 		}
-			}
+	}
 
 	// This controller method is called when the request pattern is of type
 	// 'deleteImage' and also the incoming request is of DELETE type
@@ -236,9 +240,10 @@ public class ImageController {
 	@RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
 	public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
 		try {
+			System.out.println("image id is" + imageId);
 			Image image = imageService.getImage(imageId);
 			User user = (User) session.getAttribute("loggeduser");
-
+			System.out.println("user id is" + image.getUser().getId() + " " + "session user id is " + user.getId());
 			if (image.getUser().getId() == user.getId()) {
 				imageService.deleteImage(imageId);
 				return "redirect:/images";
@@ -251,12 +256,12 @@ public class ImageController {
 				return "images/image";
 			}
 
-		}catch(Throwable t) {
-			logger.error("Error occured while deleting the image"+t.toString());
+		} catch (Throwable t) {
+			logger.error("Error occured while deleting the image" + t.toString());
 			t.printStackTrace();
 			return "/error";
 		}
-			}
+	}
 
 	// This method converts the image to Base64 format
 	private String convertUploadedFileToBase64(MultipartFile file) throws IOException {
@@ -279,7 +284,7 @@ public class ImageController {
 
 		try {
 			StringTokenizer st = new StringTokenizer(tagNames, ",");
-
+			System.out.println(tagNames);
 			while (st.hasMoreTokens()) {
 				String tagName = st.nextToken().trim();
 				Tag tag = tagService.getTagByName(tagName);
@@ -291,13 +296,13 @@ public class ImageController {
 				tags.add(tag);
 			}
 			return tags;
-			
-		}catch(Throwable t) {
-			logger.error("Exception occured while find or create the tagss "+t.toString());
+
+		} catch (Throwable t) {
+			logger.error("Exception occured while find or create the tagss " + t.toString());
 			t.printStackTrace();
 			return tags;
 		}
-		
+
 	}
 
 	// The method receives the list of all tags
@@ -305,7 +310,7 @@ public class ImageController {
 	// separated by a comma
 	// Returns the string
 	private String convertTagsToString(List<Tag> tags) {
-		
+
 		logger.info("convertTagsToString called");
 		StringBuilder tagString = new StringBuilder();
 
@@ -322,9 +327,9 @@ public class ImageController {
 	@RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
 	public String creteComments(@PathVariable("imageId") Integer imageId, @PathVariable("imageTitle") String imageTitle,
 			@RequestParam("comments") String comments, HttpSession session, Model model) {
-           logger.info("create comments api called");
+		logger.info("create comments api called");
 		try {
-			logger.info("Image id is"+imageId+""+"image title is"+imageTitle+" "+"comment is"+comments);
+			logger.info("Image id is" + imageId + "" + "image title is" + imageTitle + " " + "comment is" + comments);
 			Comment comment = new Comment();
 			comment.setComments(comments);
 			comment.setCreatedDate(new Date());
@@ -332,10 +337,17 @@ public class ImageController {
 			image.setId(imageId);
 			image.setTitle(imageTitle);
 			User user = (User) session.getAttribute("loggeduser");
+			image.setUser(user);
+			image.setDate(new Date());
 			comment.setUser(user);
 			comment.setImage(image);
 			imageService.createComments(comment);
-			return "images/upload";
+			
+			Image image1 = imageService.getImageByTitle(imageId, imageTitle);
+			model.addAttribute("image", image1);
+			model.addAttribute("tags", image1.getTags());
+			model.addAttribute("comments", image1.getComment());
+			return "images/image";
 		} catch (Throwable e) {
 			model.addAttribute("error", e.toString());
 			e.printStackTrace();

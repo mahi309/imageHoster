@@ -65,6 +65,8 @@
             <div>
                 <input class="b ph3 pv2 input-reset ba b&#45;&#45;black bg-transparent grow pointer f6 dib" type="submit"
                        value="Submit">
+                 <input action="action" type="button" value="back" onclick="history.go(-1);" />
+                       
             </div>
         </form>
 
@@ -74,7 +76,7 @@
                 <h1 class="f4 bg-light-gray black-80 mv0 pv2 ph3" th:text="${comment.user.username} + ' says'">Title of
                     card</h1>
                 <div class="pa3 bt b&#45;&#45;black-10">
-                    <p class="f6 f5-ns lh-copy measure" th:text="${comment.text}">
+                    <p class="f6 f5-ns lh-copy measure" th:text="${comment.comments}">
                         text
                     </p>
                 </div>

@@ -32,9 +32,10 @@ public class TagRepository {
         try {
             TypedQuery<Tag> typedQuery = em.createQuery("SELECT t from Tag t where t.tag_name =:tagName", Tag.class).setParameter("tagName", tagName);
             return typedQuery.getSingleResult();
-        } catch (Exception e) {
-            throw e;
-
-        }
+        } catch (NoResultException nre) {
+            return null;
+        }catch (Exception e) {
+			throw e;
+		}
     }
 }

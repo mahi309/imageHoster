@@ -38,7 +38,7 @@ public class Tag {
     //Note that no column will be generated for this attribute in the database instead a new table will be created
     //Since the mapping is Many to Many, a new table will be generated containing the two columns both referencing to the primary key of both the tables ('images', 'tags')
 
-    @ManyToMany(mappedBy = "tags",fetch=FetchType.LAZY)
+    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "tags")
     private List<Image> images=new ArrayList<>();
 
     public Tag() {

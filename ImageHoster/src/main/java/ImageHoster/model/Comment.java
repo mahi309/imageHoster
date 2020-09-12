@@ -1,7 +1,6 @@
 package ImageHoster.model;
 
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,11 +25,11 @@ public class Comment {
 	@Column(name="createdDate")
 	private Date createdDate;
 	
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="image_id")
 	private Image image;
 

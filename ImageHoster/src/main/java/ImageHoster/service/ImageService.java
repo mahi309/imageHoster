@@ -1,8 +1,12 @@
 package ImageHoster.service;
 
 import java.util.List;
+
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import Exception.BusinessException;
 import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
@@ -58,7 +62,10 @@ public class ImageService {
 	public Image getImage(Integer imageId) throws Exception {
 		try {
 			return imageRepository.getImage(imageId);
-		} catch (Exception e) {
+		}
+		catch (NoResultException nre) {
+            return null;
+        }catch (Exception e) {
 			throw e;
 		}
 	}

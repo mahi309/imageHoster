@@ -84,7 +84,10 @@ public class ImageRepository {
 					.setParameter("imageId", imageId);
 			Image image = typedQuery.getSingleResult();
 			return image;
-		}catch(Exception e) {
+		}catch (NoResultException nre) {
+            return null;
+        }
+		catch(Exception e) {
 			throw e;
 		}
 		
